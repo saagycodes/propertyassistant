@@ -1,181 +1,173 @@
 import React from "react";
 import { Stack, router } from "expo-router";
-import { FlatList, Pressable, StyleSheet, View, Text } from "react-native";
-// Components
-import { IconCircle } from "@/components/IconCircle";
+import { View, Text, StyleSheet, SafeAreaView, Pressable } from "react-native";
 import { IconSymbol } from "@/components/IconSymbol";
-import { BodyScrollView } from "@/components/BodyScrollView";
-import { Button } from "@/components/button";
-// Constants & Hooks
-import { backgroundColors } from "@/constants/Colors";
+import { colors, commonStyles } from "@/styles/commonStyles";
 
-const ICON_COLOR = "#007AFF";
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 60,
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    backgroundColor: colors.primary,
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+    boxShadow: '0px 8px 24px rgba(37, 99, 235, 0.3)',
+    elevation: 8,
+  },
+  logoText: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: '#ffffff',
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: '800',
+    color: colors.text,
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 18,
+    color: colors.grey,
+    textAlign: 'center',
+    marginBottom: 60,
+  },
+  roleContainer: {
+    gap: 16,
+  },
+  roleCard: {
+    backgroundColor: colors.card,
+    borderRadius: 16,
+    padding: 24,
+    borderWidth: 1,
+    borderColor: colors.border,
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+    elevation: 4,
+  },
+  roleHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  roleIcon: {
+    width: 48,
+    height: 48,
+    backgroundColor: colors.primary,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
+  },
+  roleTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: colors.text,
+    flex: 1,
+  },
+  roleDescription: {
+    fontSize: 16,
+    color: colors.grey,
+    lineHeight: 22,
+  },
+  chevron: {
+    marginLeft: 12,
+  },
+});
+
+const roles = [
+  {
+    id: 'landlord',
+    title: 'Landlord',
+    description: 'Manage properties, tenants, and view reports',
+    icon: 'house',
+    route: '/landlord',
+  },
+  {
+    id: 'tenant',
+    title: 'Tenant',
+    description: 'View rent status, documents, and raise tickets',
+    icon: 'person',
+    route: '/tenant',
+  },
+  {
+    id: 'admin',
+    title: 'Admin',
+    description: 'Full system access and tenant management',
+    icon: 'gear',
+    route: '/admin',
+  },
+];
 
 export default function HomeScreen() {
+  console.log('HomeScreen rendered');
 
-  const modalDemos = [
-    {
-      title: "Standard Modal",
-      description: "Full screen modal presentation",
-      route: "/modal",
-      color: "#007AFF",
-    },
-    {
-      title: "Form Sheet",
-      description: "Bottom sheet with detents and grabber",
-      route: "/formsheet",
-      color: "#34C759",
-    },
-    {
-      title: "Transparent Modal",
-      description: "Overlay without obscuring background",
-      route: "/transparent-modal",
-      color: "#FF9500",
-    }
-  ];
-
-  const renderModalDemo = ({ item }: { item: typeof modalDemos[0] }) => (
-    <View style={styles.demoCard}>
-      <View style={[styles.demoIcon, { backgroundColor: item.color }]}>
-        <IconSymbol name="square.grid.3x3" color="white" size={24} />
-      </View>
-      <View style={styles.demoContent}>
-        <Text style={styles.demoTitle}>{item.title}</Text>
-        <Text style={styles.demoDescription}>{item.description}</Text>
-      </View>
-      <Button
-        variant="outline"
-        size="sm"
-        onPress={() => router.push(item.route as any)}
-      >
-        Try It
-      </Button>
-    </View>
-  );
-
-  const renderEmptyList = () => (
-    <BodyScrollView contentContainerStyle={styles.emptyStateContainer}>
-      <IconCircle
-        emoji=""
-        backgroundColor={
-          backgroundColors[Math.floor(Math.random() * backgroundColors.length)]
-        }
-      />
-    </BodyScrollView>
-  );
-
-  const renderHeaderRight = () => (
-    <Pressable
-      onPress={() => {console.log("plus")}}
-      style={styles.headerButtonContainer}
-    >
-      <IconSymbol name="plus" color={ICON_COLOR} />
-    </Pressable>
-  );
-
-  const renderHeaderLeft = () => (
-    <Pressable
-      onPress={() => {console.log("gear")}}
-      style={styles.headerButtonContainer}
-    >
-      <IconSymbol
-        name="gear"
-        color={ICON_COLOR}
-      />
-    </Pressable>
-  );
+  const handleRoleSelect = (route: string) => {
+    console.log('Role selected:', route);
+    router.push(route as any);
+  };
 
   return (
     <>
       <Stack.Screen
         options={{
-          title: "Building the app...",
-          headerRight: renderHeaderRight,
-          headerLeft: renderHeaderLeft,
+          title: "Prop AI",
+          headerShown: false,
         }}
       />
-      <View style={styles.container}>
-        <FlatList
-          data={modalDemos}
-          renderItem={renderModalDemo}
-          keyExtractor={(item) => item.route}
-          contentContainerStyle={styles.listContainer}
-          contentInsetAdjustmentBehavior="automatic"
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
+      <SafeAreaView style={commonStyles.safeArea}>
+        <View style={styles.container}>
+          <View style={styles.logoContainer}>
+            <View style={styles.logo}>
+              <Text style={styles.logoText}>PA</Text>
+            </View>
+            <Text style={styles.title}>Prop AI</Text>
+            <Text style={styles.subtitle}>Property Management System</Text>
+          </View>
+
+          <View style={styles.roleContainer}>
+            {roles.map((role) => (
+              <Pressable
+                key={role.id}
+                style={styles.roleCard}
+                onPress={() => handleRoleSelect(role.route)}
+              >
+                <View style={styles.roleHeader}>
+                  <View style={styles.roleIcon}>
+                    <IconSymbol 
+                      name={role.icon as any} 
+                      size={24} 
+                      color="#ffffff" 
+                    />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.roleTitle}>{role.title}</Text>
+                    <Text style={styles.roleDescription}>{role.description}</Text>
+                  </View>
+                  <View style={styles.chevron}>
+                    <IconSymbol 
+                      name="chevron.right" 
+                      size={20} 
+                      color={colors.grey} 
+                    />
+                  </View>
+                </View>
+              </Pressable>
+            ))}
+          </View>
+        </View>
+      </SafeAreaView>
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  headerSection: {
-    padding: 20,
-    paddingBottom: 16,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e5e5e5',
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    color: '#666',
-    lineHeight: 22,
-  },
-  listContainer: {
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-  },
-  demoCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  demoIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  demoContent: {
-    flex: 1,
-  },
-  demoTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 4,
-  },
-  demoDescription: {
-    fontSize: 14,
-    color: '#666',
-    lineHeight: 18,
-  },
-  emptyStateContainer: {
-    alignItems: "center",
-    gap: 8,
-    paddingTop: 100,
-  },
-  headerButtonContainer: {
-    padding: 6, // Just enough padding around the 24px icon
-  },
-});
