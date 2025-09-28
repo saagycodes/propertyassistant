@@ -1,10 +1,11 @@
 
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, ScrollView, Pressable } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, ScrollView, Pressable, Image } from 'react-native';
 import { Stack, router } from 'expo-router';
 import { IconSymbol } from '@/components/IconSymbol';
+import BackButton from '@/components/BackButton';
 import { colors, commonStyles } from '@/styles/commonStyles';
-import { mockTenants, mockTickets } from '@/data/mockData';
+import { mockTenants, mockTickets, mockProperties, mockDocuments } from '@/data/mockData';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,21 +18,109 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     paddingHorizontal: 20,
   },
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  greeting: {
+    flex: 1,
+    marginLeft: 16,
+  },
   headerTitle: {
     fontSize: 28,
     fontWeight: '800',
     color: '#ffffff',
-    marginBottom: 8,
+    marginBottom: 4,
   },
   headerSubtitle: {
     fontSize: 16,
     color: '#ffffff',
     opacity: 0.9,
   },
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#ffffff',
+  },
   content: {
     flex: 1,
     paddingHorizontal: 20,
     paddingTop: 20,
+  },
+  quickOverview: {
+    marginBottom: 30,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: 16,
+  },
+  overviewCard: {
+    backgroundColor: colors.card,
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+    elevation: 4,
+  },
+  overviewHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  overviewTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: colors.text,
+  },
+  propertyInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  propertyImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 12,
+    marginRight: 16,
+    backgroundColor: colors.backgroundAlt,
+  },
+  propertyDetails: {
+    flex: 1,
+  },
+  propertyName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.text,
+    marginBottom: 4,
+  },
+  roomNumber: {
+    fontSize: 14,
+    color: colors.grey,
+  },
+  infoRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  infoLabel: {
+    fontSize: 14,
+    color: colors.grey,
+  },
+  infoValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.text,
   },
   rentCard: {
     backgroundColor: colors.card,
@@ -181,7 +270,9 @@ export default function TenantDashboard() {
 
   // Using first tenant as current user
   const currentTenant = mockTenants[0];
+  const currentProperty = mockProperties.find(prop => prop.id === currentTenant.propertyId);
   const myTickets = mockTickets.filter(ticket => ticket.tenantId === currentTenant.id);
+  const myDocuments = mockDocuments.filter(doc => doc.tenantId === currentTenant.id);
 
   const getRentStatusColor = (status: string) => {
     switch (status) {
@@ -225,6 +316,9 @@ export default function TenantDashboard() {
     if (item.id === 'tickets') {
       return { ...item, badge: myTickets.length };
     }
+    if (item.id === 'documents') {
+      return { ...item, badge: myDocuments.length };
+    }
     return item;
   });
 
@@ -238,11 +332,62 @@ export default function TenantDashboard() {
       <SafeAreaView style={commonStyles.safeArea}>
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>Hello, {currentTenant.name.split(' ')[0]}!</Text>
-            <Text style={styles.headerSubtitle}>Room {currentTenant.roomNumber} • Sunset Apartments</Text>
+            <View style={styles.headerTop}>
+              <BackButton color="#ffffff" />
+              <View style={styles.greeting}>
+                <Text style={styles.headerTitle}>
+                  Hello, {currentTenant.name.split(' ')[0]}!
+                </Text>
+                <Text style={styles.headerSubtitle}>
+                  Welcome to your tenant portal
+                </Text>
+              </View>
+              <Image 
+                source={{ uri: currentTenant.profileImage }} 
+                style={styles.profileImage}
+              />
+            </View>
           </View>
 
           <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+            {/* Quick Overview Section */}
+            <View style={styles.quickOverview}>
+              <Text style={styles.sectionTitle}>Your Residence</Text>
+              
+              <View style={styles.overviewCard}>
+                <View style={styles.overviewHeader}>
+                  <Text style={styles.overviewTitle}>Property Details</Text>
+                </View>
+                
+                <View style={styles.propertyInfo}>
+                  <Image 
+                    source={{ uri: currentProperty?.imageUrl }} 
+                    style={styles.propertyImage}
+                  />
+                  <View style={styles.propertyDetails}>
+                    <Text style={styles.propertyName}>{currentProperty?.name}</Text>
+                    <Text style={styles.roomNumber}>Room {currentTenant.roomNumber}</Text>
+                  </View>
+                </View>
+
+                <View style={styles.infoRow}>
+                  <Text style={styles.infoLabel}>Address</Text>
+                  <Text style={styles.infoValue}>{currentProperty?.address}</Text>
+                </View>
+
+                <View style={styles.infoRow}>
+                  <Text style={styles.infoLabel}>Lease Start</Text>
+                  <Text style={styles.infoValue}>{formatDate(currentTenant.leaseStartDate)}</Text>
+                </View>
+
+                <View style={[styles.infoRow, { borderBottomWidth: 0 }]}>
+                  <Text style={styles.infoLabel}>Lease End</Text>
+                  <Text style={styles.infoValue}>{formatDate(currentTenant.leaseEndDate)}</Text>
+                </View>
+              </View>
+            </View>
+
+            {/* Rent Status Card */}
             <View style={styles.rentCard}>
               <View style={styles.rentHeader}>
                 <Text style={styles.rentTitle}>Monthly Rent</Text>
@@ -274,6 +419,7 @@ export default function TenantDashboard() {
               )}
             </View>
 
+            {/* Menu Grid */}
             <View style={styles.menuGrid}>
               {updatedMenuItems.map((item) => (
                 <Pressable

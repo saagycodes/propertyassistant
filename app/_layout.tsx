@@ -1,3 +1,4 @@
+
 import "react-native-reanimated";
 import { useEffect } from "react";
 import { useFonts } from "expo-font";
@@ -13,7 +14,6 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import { Button } from "@/components/button";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -76,17 +76,25 @@ export default function RootLayout() {
             >
               {/* Main app group */}
               <Stack.Screen name="(index)" />
+              
+              {/* Login screen */}
+              <Stack.Screen name="login" />
+              
+              {/* Role-based screens */}
+              <Stack.Screen name="landlord" />
+              <Stack.Screen name="tenant" />
+              <Stack.Screen name="admin" />
 
               {/* Modal Demo Screens */}
               <Stack.Screen
-                name="modal-demo"
+                name="modal"
                 options={{
                   presentation: "modal",
                   headerShown: true,
                 }}
               />
               <Stack.Screen
-                name="formsheet-demo"
+                name="formsheet"
                 options={{
                   presentation: "formSheet",
                   sheetGrabberVisible: true,
@@ -96,7 +104,7 @@ export default function RootLayout() {
                 }}
               />
               <Stack.Screen
-                name="transparent-modal-demo"
+                name="transparent-modal"
                 options={{
                   presentation: "transparentModal",
                   headerShown: false,

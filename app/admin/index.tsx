@@ -3,8 +3,9 @@ import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, Pressable } from 'react-native';
 import { Stack, router } from 'expo-router';
 import { IconSymbol } from '@/components/IconSymbol';
+import BackButton from '@/components/BackButton';
 import { colors, commonStyles } from '@/styles/commonStyles';
-import { mockProperties, mockTickets, mockTenants } from '@/data/mockData';
+import { mockProperties, mockTickets, mockTenants, mockUsers } from '@/data/mockData';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,16 +18,34 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     paddingHorizontal: 20,
   },
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+  },
+  greeting: {
+    flex: 1,
+    marginLeft: 16,
+  },
   headerTitle: {
     fontSize: 28,
     fontWeight: '800',
     color: '#ffffff',
-    marginBottom: 8,
+    marginBottom: 4,
   },
   headerSubtitle: {
     fontSize: 16,
     color: '#ffffff',
     opacity: 0.9,
+  },
+  profileImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#ffffff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   content: {
     flex: 1,
@@ -35,21 +54,18 @@ const styles = StyleSheet.create({
   },
   statsContainer: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
     justifyContent: 'space-between',
     marginBottom: 30,
-    gap: 12,
   },
   statCard: {
     backgroundColor: colors.card,
     borderRadius: 16,
     padding: 16,
-    width: '47%',
+    flex: 1,
+    marginHorizontal: 4,
     borderWidth: 1,
     borderColor: colors.border,
     alignItems: 'center',
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-    elevation: 3,
   },
   statNumber: {
     fontSize: 24,
@@ -120,24 +136,24 @@ const styles = StyleSheet.create({
 
 const menuItems = [
   {
-    id: 'properties',
-    title: 'Properties',
-    description: 'Manage all properties',
-    icon: 'house',
-    route: '/admin/properties',
-    badge: 0,
-  },
-  {
     id: 'tenants',
     title: 'Tenants',
-    description: 'Add/remove tenants',
+    description: 'Manage tenant profiles',
     icon: 'person.2',
     route: '/admin/tenants',
     badge: 0,
   },
   {
+    id: 'properties',
+    title: 'Properties',
+    description: 'Property overview',
+    icon: 'house',
+    route: '/admin/properties',
+    badge: 0,
+  },
+  {
     id: 'tickets',
-    title: 'All Tickets',
+    title: 'Tickets',
     description: 'Handle support requests',
     icon: 'exclamationmark.circle',
     route: '/admin/tickets',
@@ -146,23 +162,23 @@ const menuItems = [
   {
     id: 'documents',
     title: 'Documents',
-    description: 'Document archive',
+    description: 'Document backup',
     icon: 'doc.text',
     route: '/admin/documents',
     badge: 0,
   },
   {
     id: 'messages',
-    title: 'Broadcast',
-    description: 'Send messages',
-    icon: 'megaphone',
+    title: 'Messages',
+    description: 'Broadcast & chat',
+    icon: 'message',
     route: '/admin/messages',
     badge: 0,
   },
   {
     id: 'profile',
     title: 'Profile',
-    description: 'Account settings',
+    description: 'Admin settings',
     icon: 'person.circle',
     route: '/admin/profile',
     badge: 0,
@@ -172,18 +188,19 @@ const menuItems = [
 export default function AdminDashboard() {
   console.log('AdminDashboard rendered');
 
+  const admin = mockUsers.find(user => user.role === 'admin');
   const totalProperties = mockProperties.length;
   const totalTenants = mockTenants.length;
-  const totalRooms = mockProperties.reduce((sum, prop) => sum + prop.totalRooms, 0);
-  const vacantRooms = mockProperties.reduce((sum, prop) => sum + prop.vacantRooms, 0);
-  const allTickets = mockTickets.length;
-  const openTickets = mockTickets.filter(ticket => ticket.status === 'open').length;
-  const overdueRent = mockTenants.filter(tenant => tenant.rentStatus === 'overdue').length;
+  const totalTickets = mockTickets.length;
+  const pendingTickets = mockTickets.filter(ticket => ticket.status === 'open' || ticket.status === 'escalated').length;
 
   // Update badge counts
   const updatedMenuItems = menuItems.map(item => {
     if (item.id === 'tickets') {
-      return { ...item, badge: openTickets };
+      return { ...item, badge: pendingTickets };
+    }
+    if (item.id === 'tenants') {
+      return { ...item, badge: totalTenants };
     }
     return item;
   });
@@ -203,8 +220,20 @@ export default function AdminDashboard() {
       <SafeAreaView style={commonStyles.safeArea}>
         <View style={styles.container}>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>Admin Dashboard</Text>
-            <Text style={styles.headerSubtitle}>System overview and management</Text>
+            <View style={styles.headerTop}>
+              <BackButton color="#ffffff" />
+              <View style={styles.greeting}>
+                <Text style={styles.headerTitle}>
+                  Welcome, {admin?.name.split(' ')[0] || 'Admin'}!
+                </Text>
+                <Text style={styles.headerSubtitle}>
+                  System administration panel
+                </Text>
+              </View>
+              <View style={styles.profileImage}>
+                <IconSymbol name="person.fill" size={24} color={colors.primary} />
+              </View>
+            </View>
           </View>
 
           <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -215,23 +244,15 @@ export default function AdminDashboard() {
               </View>
               <View style={styles.statCard}>
                 <Text style={styles.statNumber}>{totalTenants}</Text>
-                <Text style={styles.statLabel}>Active Tenants</Text>
+                <Text style={styles.statLabel}>Tenants</Text>
               </View>
               <View style={styles.statCard}>
-                <Text style={styles.statNumber}>{vacantRooms}</Text>
-                <Text style={styles.statLabel}>Vacant Rooms</Text>
-              </View>
-              <View style={styles.statCard}>
-                <Text style={styles.statNumber}>{openTickets}</Text>
-                <Text style={styles.statLabel}>Open Tickets</Text>
-              </View>
-              <View style={styles.statCard}>
-                <Text style={styles.statNumber}>{overdueRent}</Text>
-                <Text style={styles.statLabel}>Overdue Rent</Text>
-              </View>
-              <View style={styles.statCard}>
-                <Text style={styles.statNumber}>{allTickets}</Text>
+                <Text style={styles.statNumber}>{totalTickets}</Text>
                 <Text style={styles.statLabel}>Total Tickets</Text>
+              </View>
+              <View style={styles.statCard}>
+                <Text style={styles.statNumber}>{pendingTickets}</Text>
+                <Text style={styles.statLabel}>Pending</Text>
               </View>
             </View>
 

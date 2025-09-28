@@ -3,50 +3,72 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable, Image, Modal, TextInput } from 'react-native';
 import { Stack } from 'expo-router';
 import { IconSymbol } from '@/components/IconSymbol';
-import { colors, commonStyles } from '@/styles/commonStyles';
+import BackButton from '@/components/BackButton';
 import { mockTenants, mockProperties } from '@/data/mockData';
+import { colors, commonStyles } from '@/styles/commonStyles';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    paddingHorizontal: 16,
   },
-  fab: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: colors.primary,
+  header: {
+    flexDirection: 'row',
     alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 60,
+    paddingBottom: 20,
+    backgroundColor: colors.card,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: colors.text,
+    marginLeft: 16,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+  addButton: {
+    backgroundColor: colors.primary,
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    marginBottom: 20,
+    flexDirection: 'row',
     justifyContent: 'center',
-    boxShadow: '0px 4px 12px rgba(37, 99, 235, 0.3)',
-    elevation: 8,
-    zIndex: 1000,
+  },
+  addButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '600',
+    marginLeft: 8,
   },
   tenantCard: {
     backgroundColor: colors.card,
     borderRadius: 16,
-    padding: 16,
-    marginVertical: 8,
+    padding: 20,
+    marginBottom: 16,
     borderWidth: 1,
     borderColor: colors.border,
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-    elevation: 3,
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+    elevation: 4,
   },
   tenantHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   tenantImage: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: colors.backgroundAlt,
     marginRight: 16,
+    backgroundColor: colors.backgroundAlt,
   },
   tenantInfo: {
     flex: 1,
@@ -57,59 +79,63 @@ const styles = StyleSheet.create({
     color: colors.text,
     marginBottom: 4,
   },
-  tenantProperty: {
+  tenantEmail: {
     fontSize: 14,
     color: colors.grey,
-    marginBottom: 2,
+    marginBottom: 4,
   },
-  tenantRoom: {
+  tenantPhone: {
     fontSize: 14,
-    color: colors.primary,
-    fontWeight: '500',
+    color: colors.grey,
+  },
+  rentStatusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  rentStatusText: {
+    fontSize: 12,
+    fontWeight: '600',
   },
   tenantDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   detailItem: {
     alignItems: 'center',
-    flex: 1,
   },
   detailValue: {
     fontSize: 16,
     fontWeight: '600',
     color: colors.text,
+    marginBottom: 4,
   },
   detailLabel: {
     fontSize: 12,
     color: colors.grey,
-    marginTop: 2,
   },
-  rentStatus: {
+  tenantFooter: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
   },
-  statusBadge: {
+  propertyInfo: {
+    fontSize: 14,
+    color: colors.grey,
+  },
+  removeButton: {
+    backgroundColor: colors.error,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
+    borderRadius: 8,
   },
-  statusText: {
-    fontSize: 12,
-    fontWeight: '600',
-    marginLeft: 4,
-  },
-  actionButton: {
-    backgroundColor: colors.error,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-  },
-  actionButtonText: {
+  removeButtonText: {
     color: '#ffffff',
     fontSize: 12,
     fontWeight: '600',
@@ -122,7 +148,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: colors.card,
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 24,
     width: '90%',
     maxWidth: 400,
@@ -135,56 +161,52 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   input: {
+    backgroundColor: colors.backgroundAlt,
+    borderRadius: 12,
+    padding: 16,
+    fontSize: 16,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 12,
-    padding: 12,
-    fontSize: 16,
     color: colors.text,
     marginBottom: 16,
-    backgroundColor: colors.background,
   },
   modalButtons: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     gap: 12,
   },
   modalButton: {
     flex: 1,
-    paddingVertical: 12,
+    padding: 16,
     borderRadius: 12,
     alignItems: 'center',
-  },
-  cancelButton: {
-    backgroundColor: colors.backgroundAlt,
   },
   submitButton: {
     backgroundColor: colors.primary,
   },
-  buttonText: {
+  cancelButton: {
+    backgroundColor: colors.backgroundAlt,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  submitButtonText: {
+    color: '#ffffff',
     fontSize: 16,
     fontWeight: '600',
   },
   cancelButtonText: {
     color: colors.text,
-  },
-  submitButtonText: {
-    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
 
 export default function TenantsScreen() {
   console.log('TenantsScreen rendered');
-
+  
   const [showModal, setShowModal] = useState(false);
-  const [newTenant, setNewTenant] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    propertyId: '',
-    roomNumber: '',
-    rentAmount: '',
-  });
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
 
   const getRentStatusColor = (status: string) => {
     switch (status) {
@@ -206,177 +228,169 @@ export default function TenantsScreen() {
 
   const getPropertyName = (propertyId: string) => {
     const property = mockProperties.find(p => p.id === propertyId);
-    return property?.name || 'Unknown Property';
+    return property ? property.name : 'Unknown Property';
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { 
       month: 'short', 
-      day: 'numeric'
+      day: 'numeric',
+      year: 'numeric'
     });
   };
 
   const handleRemoveTenant = (tenantId: string) => {
-    console.log('Removing tenant:', tenantId);
-    // In a real app, this would remove the tenant from the backend
+    console.log('Remove tenant:', tenantId);
+    // Here you would typically remove the tenant
   };
 
   const handleAddTenant = () => {
-    console.log('Adding tenant:', newTenant);
-    // In a real app, this would add the tenant to the backend
+    console.log('Add tenant:', { name, email, phone });
+    // Here you would typically add the tenant
+    setName('');
+    setEmail('');
+    setPhone('');
     setShowModal(false);
-    setNewTenant({
-      name: '',
-      email: '',
-      phone: '',
-      propertyId: '',
-      roomNumber: '',
-      rentAmount: '',
-    });
   };
 
   return (
     <>
       <Stack.Screen
         options={{
-          title: 'Tenant Management',
+          headerShown: false,
         }}
       />
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        {mockTenants.map((tenant) => (
-          <View key={tenant.id} style={styles.tenantCard}>
-            <View style={styles.tenantHeader}>
-              <Image
-                source={{ uri: tenant.profileImage }}
-                style={styles.tenantImage}
-                resizeMode="cover"
-              />
-              <View style={styles.tenantInfo}>
-                <Text style={styles.tenantName}>{tenant.name}</Text>
-                <Text style={styles.tenantProperty}>{getPropertyName(tenant.propertyId)}</Text>
-                <Text style={styles.tenantRoom}>Room {tenant.roomNumber}</Text>
-              </View>
-            </View>
-
-            <View style={styles.tenantDetails}>
-              <View style={styles.detailItem}>
-                <Text style={styles.detailValue}>${tenant.rentAmount}</Text>
-                <Text style={styles.detailLabel}>Monthly Rent</Text>
-              </View>
-              <View style={styles.detailItem}>
-                <Text style={styles.detailValue}>{formatDate(tenant.rentDueDate)}</Text>
-                <Text style={styles.detailLabel}>Due Date</Text>
-              </View>
-              <View style={styles.detailItem}>
-                <Text style={styles.detailValue}>{formatDate(tenant.leaseEndDate)}</Text>
-                <Text style={styles.detailLabel}>Lease Ends</Text>
-              </View>
-            </View>
-
-            <View style={styles.rentStatus}>
-              <View style={[
-                styles.statusBadge,
-                { backgroundColor: getRentStatusColor(tenant.rentStatus) + '20' }
-              ]}>
-                <IconSymbol
-                  name={getRentStatusIcon(tenant.rentStatus) as any}
-                  size={14}
-                  color={getRentStatusColor(tenant.rentStatus)}
-                />
-                <Text style={[
-                  styles.statusText,
-                  { color: getRentStatusColor(tenant.rentStatus) }
-                ]}>
-                  {tenant.rentStatus.toUpperCase()}
-                </Text>
-              </View>
-
-              <Pressable
-                style={styles.actionButton}
-                onPress={() => handleRemoveTenant(tenant.id)}
-              >
-                <Text style={styles.actionButtonText}>Remove</Text>
-              </Pressable>
-            </View>
-          </View>
-        ))}
-      </ScrollView>
-
-      <Pressable style={styles.fab} onPress={() => setShowModal(true)}>
-        <IconSymbol name="plus" size={24} color="#ffffff" />
-      </Pressable>
-
-      <Modal
-        visible={showModal}
-        transparent
-        animationType="fade"
-        onRequestClose={() => setShowModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Add New Tenant</Text>
-            
-            <TextInput
-              style={styles.input}
-              placeholder="Full Name"
-              placeholderTextColor={colors.grey}
-              value={newTenant.name}
-              onChangeText={(text) => setNewTenant({ ...newTenant, name: text })}
-            />
-            
-            <TextInput
-              style={styles.input}
-              placeholder="Email Address"
-              placeholderTextColor={colors.grey}
-              value={newTenant.email}
-              onChangeText={(text) => setNewTenant({ ...newTenant, email: text })}
-              keyboardType="email-address"
-            />
-            
-            <TextInput
-              style={styles.input}
-              placeholder="Phone Number"
-              placeholderTextColor={colors.grey}
-              value={newTenant.phone}
-              onChangeText={(text) => setNewTenant({ ...newTenant, phone: text })}
-              keyboardType="phone-pad"
-            />
-            
-            <TextInput
-              style={styles.input}
-              placeholder="Room Number"
-              placeholderTextColor={colors.grey}
-              value={newTenant.roomNumber}
-              onChangeText={(text) => setNewTenant({ ...newTenant, roomNumber: text })}
-            />
-            
-            <TextInput
-              style={styles.input}
-              placeholder="Monthly Rent Amount"
-              placeholderTextColor={colors.grey}
-              value={newTenant.rentAmount}
-              onChangeText={(text) => setNewTenant({ ...newTenant, rentAmount: text })}
-              keyboardType="numeric"
-            />
-
-            <View style={styles.modalButtons}>
-              <Pressable
-                style={[styles.modalButton, styles.cancelButton]}
-                onPress={() => setShowModal(false)}
-              >
-                <Text style={[styles.buttonText, styles.cancelButtonText]}>Cancel</Text>
-              </Pressable>
-              <Pressable
-                style={[styles.modalButton, styles.submitButton]}
-                onPress={handleAddTenant}
-              >
-                <Text style={[styles.buttonText, styles.submitButtonText]}>Add Tenant</Text>
-              </Pressable>
-            </View>
-          </View>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <BackButton />
+          <Text style={styles.headerTitle}>Tenant Management</Text>
         </View>
-      </Modal>
+
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          <Pressable style={styles.addButton} onPress={() => setShowModal(true)}>
+            <IconSymbol name="plus" size={20} color="#ffffff" />
+            <Text style={styles.addButtonText}>Add New Tenant</Text>
+          </Pressable>
+
+          {mockTenants.map((tenant) => (
+            <View key={tenant.id} style={styles.tenantCard}>
+              <View style={styles.tenantHeader}>
+                <Image 
+                  source={{ uri: tenant.profileImage }} 
+                  style={styles.tenantImage}
+                />
+                <View style={styles.tenantInfo}>
+                  <Text style={styles.tenantName}>{tenant.name}</Text>
+                  <Text style={styles.tenantEmail}>{tenant.email}</Text>
+                  <Text style={styles.tenantPhone}>{tenant.phone}</Text>
+                </View>
+                <View style={[
+                  styles.rentStatusBadge,
+                  { backgroundColor: getRentStatusColor(tenant.rentStatus) + '20' }
+                ]}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <IconSymbol
+                      name={getRentStatusIcon(tenant.rentStatus) as any}
+                      size={12}
+                      color={getRentStatusColor(tenant.rentStatus)}
+                    />
+                    <Text style={[
+                      styles.rentStatusText,
+                      { color: getRentStatusColor(tenant.rentStatus), marginLeft: 4 }
+                    ]}>
+                      {tenant.rentStatus.toUpperCase()}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.tenantDetails}>
+                <View style={styles.detailItem}>
+                  <Text style={styles.detailValue}>Room {tenant.roomNumber}</Text>
+                  <Text style={styles.detailLabel}>Room</Text>
+                </View>
+                <View style={styles.detailItem}>
+                  <Text style={styles.detailValue}>${tenant.rentAmount}</Text>
+                  <Text style={styles.detailLabel}>Rent</Text>
+                </View>
+                <View style={styles.detailItem}>
+                  <Text style={styles.detailValue}>{formatDate(tenant.rentDueDate)}</Text>
+                  <Text style={styles.detailLabel}>Due Date</Text>
+                </View>
+              </View>
+
+              <View style={styles.tenantFooter}>
+                <Text style={styles.propertyInfo}>
+                  {getPropertyName(tenant.propertyId)}
+                </Text>
+                <Pressable 
+                  style={styles.removeButton}
+                  onPress={() => handleRemoveTenant(tenant.id)}
+                >
+                  <Text style={styles.removeButtonText}>Remove</Text>
+                </Pressable>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+
+        <Modal
+          visible={showModal}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setShowModal(false)}
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Add New Tenant</Text>
+              
+              <TextInput
+                style={styles.input}
+                value={name}
+                onChangeText={setName}
+                placeholder="Full Name"
+                placeholderTextColor={colors.grey}
+              />
+              
+              <TextInput
+                style={styles.input}
+                value={email}
+                onChangeText={setEmail}
+                placeholder="Email Address"
+                placeholderTextColor={colors.grey}
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+              
+              <TextInput
+                style={styles.input}
+                value={phone}
+                onChangeText={setPhone}
+                placeholder="Phone Number"
+                placeholderTextColor={colors.grey}
+                keyboardType="phone-pad"
+              />
+              
+              <View style={styles.modalButtons}>
+                <Pressable 
+                  style={[styles.modalButton, styles.cancelButton]}
+                  onPress={() => setShowModal(false)}
+                >
+                  <Text style={styles.cancelButtonText}>Cancel</Text>
+                </Pressable>
+                
+                <Pressable 
+                  style={[styles.modalButton, styles.submitButton]}
+                  onPress={handleAddTenant}
+                >
+                  <Text style={styles.submitButtonText}>Add Tenant</Text>
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
     </>
   );
 }

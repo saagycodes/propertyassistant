@@ -3,92 +3,121 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Stack } from 'expo-router';
 import { IconSymbol } from '@/components/IconSymbol';
-import { colors, commonStyles } from '@/styles/commonStyles';
+import BackButton from '@/components/BackButton';
 import { mockTickets } from '@/data/mockData';
+import { colors, commonStyles } from '@/styles/commonStyles';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    paddingHorizontal: 16,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 60,
+    paddingBottom: 20,
+    backgroundColor: colors.card,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: colors.text,
+    marginLeft: 16,
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingTop: 20,
   },
   ticketCard: {
     backgroundColor: colors.card,
-    borderRadius: 12,
-    padding: 16,
-    marginVertical: 6,
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
     borderWidth: 1,
     borderColor: colors.border,
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-    elevation: 3,
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
+    elevation: 4,
   },
   ticketHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 8,
+    marginBottom: 12,
   },
   ticketTitle: {
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: '600',
     color: colors.text,
     flex: 1,
-    marginRight: 8,
+    marginRight: 12,
   },
   priorityBadge: {
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
-    alignSelf: 'flex-start',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   priorityText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#ffffff',
+  },
+  ticketDescription: {
+    fontSize: 16,
+    color: colors.grey,
+    lineHeight: 22,
+    marginBottom: 16,
   },
   ticketMeta: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 16,
   },
-  metaText: {
+  tenantInfo: {
     fontSize: 14,
     color: colors.grey,
-    marginLeft: 4,
   },
-  ticketDescription: {
+  propertyInfo: {
     fontSize: 14,
-    color: colors.text,
-    lineHeight: 20,
-    marginBottom: 12,
+    color: colors.grey,
   },
   ticketFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
   },
-  statusBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
+  statusContainer: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   statusText: {
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: '600',
-    marginLeft: 4,
+    marginLeft: 8,
   },
-  actionButton: {
-    backgroundColor: colors.primary,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
+  escalateButton: {
+    backgroundColor: colors.error,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 8,
   },
-  actionButtonText: {
+  escalateButtonText: {
     color: '#ffffff',
     fontSize: 12,
     fontWeight: '600',
+  },
+  dateText: {
+    fontSize: 14,
+    color: colors.grey,
   },
 });
 
@@ -107,20 +136,20 @@ export default function TicketsScreen() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'open': return colors.error;
-      case 'in-progress': return colors.warning;
       case 'resolved': return colors.success;
-      case 'escalated': return '#8b5cf6';
+      case 'in-progress': return colors.warning;
+      case 'escalated': return colors.error;
+      case 'open': return colors.primary;
       default: return colors.grey;
     }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'open': return 'exclamationmark.circle';
-      case 'in-progress': return 'clock';
-      case 'resolved': return 'checkmark.circle';
-      case 'escalated': return 'arrow.up.circle';
+      case 'resolved': return 'checkmark.circle.fill';
+      case 'in-progress': return 'clock.fill';
+      case 'escalated': return 'exclamationmark.triangle.fill';
+      case 'open': return 'circle.fill';
       default: return 'circle';
     }
   };
@@ -136,73 +165,80 @@ export default function TicketsScreen() {
   };
 
   const handleEscalate = (ticketId: string) => {
-    console.log('Escalating ticket:', ticketId);
-    // In a real app, this would update the ticket status
+    console.log('Escalate ticket:', ticketId);
+    // Here you would typically update the ticket status
   };
 
   return (
     <>
       <Stack.Screen
         options={{
-          title: 'Support Tickets',
+          headerShown: false,
         }}
       />
-      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        {mockTickets.map((ticket) => (
-          <View key={ticket.id} style={styles.ticketCard}>
-            <View style={styles.ticketHeader}>
-              <Text style={styles.ticketTitle}>{ticket.title}</Text>
-              <View style={[
-                styles.priorityBadge,
-                { backgroundColor: getPriorityColor(ticket.priority) }
-              ]}>
-                <Text style={styles.priorityText}>{ticket.priority.toUpperCase()}</Text>
-              </View>
-            </View>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <BackButton />
+          <Text style={styles.headerTitle}>Support Tickets</Text>
+        </View>
 
-            <View style={styles.ticketMeta}>
-              <IconSymbol name="person.circle" size={16} color={colors.grey} />
-              <Text style={styles.metaText}>{ticket.tenantName}</Text>
-              <Text style={styles.metaText}> • </Text>
-              <Text style={styles.metaText}>{ticket.propertyName}</Text>
-            </View>
-
-            <Text style={styles.ticketDescription}>{ticket.description}</Text>
-
-            <View style={styles.ticketFooter}>
-              <View style={[
-                styles.statusBadge,
-                { backgroundColor: getStatusColor(ticket.status) + '20' }
-              ]}>
-                <IconSymbol
-                  name={getStatusIcon(ticket.status) as any}
-                  size={14}
-                  color={getStatusColor(ticket.status)}
-                />
-                <Text style={[
-                  styles.statusText,
-                  { color: getStatusColor(ticket.status) }
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+          {mockTickets.map((ticket) => (
+            <View key={ticket.id} style={styles.ticketCard}>
+              <View style={styles.ticketHeader}>
+                <Text style={styles.ticketTitle}>{ticket.title}</Text>
+                <View style={[
+                  styles.priorityBadge,
+                  { backgroundColor: getPriorityColor(ticket.priority) + '20' }
                 ]}>
-                  {ticket.status.replace('-', ' ').toUpperCase()}
+                  <Text style={[
+                    styles.priorityText,
+                    { color: getPriorityColor(ticket.priority) }
+                  ]}>
+                    {ticket.priority.toUpperCase()}
+                  </Text>
+                </View>
+              </View>
+
+              <Text style={styles.ticketDescription}>{ticket.description}</Text>
+
+              <View style={styles.ticketMeta}>
+                <Text style={styles.tenantInfo}>Tenant: {ticket.tenantName}</Text>
+                <Text style={styles.propertyInfo}>{ticket.propertyName}</Text>
+              </View>
+
+              <View style={styles.ticketFooter}>
+                <View style={styles.statusContainer}>
+                  <IconSymbol
+                    name={getStatusIcon(ticket.status) as any}
+                    size={16}
+                    color={getStatusColor(ticket.status)}
+                  />
+                  <Text style={[
+                    styles.statusText,
+                    { color: getStatusColor(ticket.status) }
+                  ]}>
+                    {ticket.status.replace('-', ' ').toUpperCase()}
+                  </Text>
+                </View>
+
+                {ticket.status === 'open' && (
+                  <Pressable 
+                    style={styles.escalateButton}
+                    onPress={() => handleEscalate(ticket.id)}
+                  >
+                    <Text style={styles.escalateButtonText}>Escalate</Text>
+                  </Pressable>
+                )}
+
+                <Text style={styles.dateText}>
+                  {formatDate(ticket.createdAt)}
                 </Text>
               </View>
-
-              {ticket.status === 'open' && (
-                <Pressable
-                  style={styles.actionButton}
-                  onPress={() => handleEscalate(ticket.id)}
-                >
-                  <Text style={styles.actionButtonText}>Escalate</Text>
-                </Pressable>
-              )}
             </View>
-
-            <Text style={[styles.metaText, { marginTop: 8, fontSize: 12 }]}>
-              Created: {formatDate(ticket.createdAt)}
-            </Text>
-          </View>
-        ))}
-      </ScrollView>
+          ))}
+        </ScrollView>
+      </View>
     </>
   );
 }
