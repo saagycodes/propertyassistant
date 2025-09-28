@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Pressable, TextInput, Alert, Image } from 'react-native';
 import { Stack, router } from 'expo-router';
 import { IconSymbol } from '@/components/IconSymbol';
-import { colors, commonStyles } from '@/styles/commonStyles';
+import { colors, commonStyles, buttonStyles } from '@/styles/commonStyles';
 import { mockUsers } from '@/data/mockData';
 
 const styles = StyleSheet.create({
@@ -18,46 +18,49 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   logo: {
-    width: 140,
-    height: 140,
+    width: 160,
+    height: 160,
     backgroundColor: colors.primary,
-    borderRadius: 35,
+    borderRadius: 40,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 24,
-    boxShadow: '0px 12px 32px rgba(37, 99, 235, 0.4)',
-    elevation: 12,
+    boxShadow: '0px 16px 40px rgba(59, 130, 246, 0.4)',
+    elevation: 16,
+    borderWidth: 4,
+    borderColor: colors.primaryLight,
   },
   logoText: {
-    fontSize: 36,
+    fontSize: 42,
     fontWeight: '900',
     color: '#ffffff',
-    letterSpacing: -1,
+    letterSpacing: -2,
   },
   companyName: {
-    fontSize: 36,
+    fontSize: 40,
     fontWeight: '900',
     color: colors.primary,
     textAlign: 'center',
     marginBottom: 8,
-    letterSpacing: -1,
+    letterSpacing: -2,
   },
   tagline: {
     fontSize: 18,
-    color: colors.grey,
+    color: colors.secondary,
     textAlign: 'center',
     marginBottom: 12,
     fontStyle: 'italic',
+    fontWeight: '600',
   },
   subtitle: {
     fontSize: 16,
-    color: colors.text,
+    color: colors.textLight,
     textAlign: 'center',
     marginBottom: 50,
     fontWeight: '500',
   },
   formContainer: {
-    gap: 20,
+    gap: 24,
     marginBottom: 40,
   },
   inputContainer: {
@@ -65,64 +68,79 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     color: colors.text,
     marginBottom: 8,
   },
   input: {
     backgroundColor: colors.card,
     borderRadius: 16,
-    padding: 18,
+    padding: 20,
     fontSize: 16,
     borderWidth: 2,
     borderColor: colors.border,
     color: colors.text,
+    fontWeight: '500',
   },
   inputFocused: {
     borderColor: colors.primary,
-    boxShadow: '0px 0px 0px 3px rgba(37, 99, 235, 0.1)',
+    boxShadow: '0px 0px 0px 4px rgba(59, 130, 246, 0.15)',
   },
   loginButton: {
     backgroundColor: colors.primary,
     borderRadius: 16,
-    padding: 18,
+    padding: 20,
     alignItems: 'center',
     marginBottom: 20,
-    boxShadow: '0px 4px 16px rgba(37, 99, 235, 0.3)',
-    elevation: 6,
+    boxShadow: '0px 6px 20px rgba(59, 130, 246, 0.4)',
+    elevation: 8,
   },
   loginButtonText: {
     color: '#ffffff',
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: '800',
   },
   demoContainer: {
-    backgroundColor: colors.backgroundAlt,
-    borderRadius: 20,
-    padding: 24,
+    backgroundColor: colors.surface,
+    borderRadius: 24,
+    padding: 28,
     marginTop: 20,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: colors.border,
+    boxShadow: '0px 8px 24px rgba(0, 0, 0, 0.08)',
+    elevation: 6,
   },
   demoTitle: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 22,
+    fontWeight: '800',
     color: colors.text,
     textAlign: 'center',
-    marginBottom: 20,
+    marginBottom: 24,
   },
   demoButton: {
     backgroundColor: colors.card,
-    borderRadius: 16,
-    padding: 18,
-    marginBottom: 12,
-    borderWidth: 1,
+    borderRadius: 18,
+    padding: 20,
+    marginBottom: 16,
+    borderWidth: 2,
     borderColor: colors.border,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
-    elevation: 3,
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.08)',
+    elevation: 4,
+  },
+  landlordButton: {
+    borderColor: colors.landlord,
+    backgroundColor: colors.card,
+  },
+  tenantButton: {
+    borderColor: colors.tenant,
+    backgroundColor: colors.card,
+  },
+  adminButton: {
+    borderColor: colors.admin,
+    backgroundColor: colors.card,
   },
   demoButtonContent: {
     flexDirection: 'row',
@@ -130,26 +148,35 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   demoIcon: {
-    width: 48,
-    height: 48,
-    backgroundColor: colors.primary,
-    borderRadius: 12,
+    width: 56,
+    height: 56,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
+  },
+  landlordIcon: {
+    backgroundColor: colors.landlord,
+  },
+  tenantIcon: {
+    backgroundColor: colors.tenant,
+  },
+  adminIcon: {
+    backgroundColor: colors.admin,
   },
   demoText: {
     flex: 1,
   },
   demoRole: {
-    fontSize: 17,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: '700',
     color: colors.text,
-    marginBottom: 2,
+    marginBottom: 4,
   },
   demoEmail: {
     fontSize: 14,
-    color: colors.grey,
+    color: colors.textLight,
+    fontWeight: '500',
   },
 });
 
@@ -157,9 +184,10 @@ const demoAccounts = [
   {
     role: 'landlord',
     name: 'Property Manager',
-    email: 'manager@propai.com',
+    email: 'manager@propertyassistant.com',
     icon: 'house.fill',
     route: '/landlord',
+    color: colors.landlord,
   },
   {
     role: 'tenant',
@@ -167,13 +195,15 @@ const demoAccounts = [
     email: 'john.smith@email.com',
     icon: 'person.fill',
     route: '/tenant',
+    color: colors.tenant,
   },
   {
     role: 'admin',
     name: 'System Admin',
-    email: 'admin@propai.com',
+    email: 'admin@propertyassistant.com',
     icon: 'gear',
     route: '/admin',
+    color: colors.admin,
   },
 ];
 
@@ -235,11 +265,37 @@ export default function LoginScreen() {
     }, 500);
   };
 
+  const getButtonStyle = (role: string) => {
+    switch (role) {
+      case 'landlord':
+        return styles.landlordButton;
+      case 'tenant':
+        return styles.tenantButton;
+      case 'admin':
+        return styles.adminButton;
+      default:
+        return {};
+    }
+  };
+
+  const getIconStyle = (role: string) => {
+    switch (role) {
+      case 'landlord':
+        return styles.landlordIcon;
+      case 'tenant':
+        return styles.tenantIcon;
+      case 'admin':
+        return styles.adminIcon;
+      default:
+        return {};
+    }
+  };
+
   return (
     <>
       <Stack.Screen
         options={{
-          title: "PropAI - Property Management",
+          title: "PropertyAssistant - Smart Property Management",
           headerShown: false,
         }}
       />
@@ -249,7 +305,7 @@ export default function LoginScreen() {
             <View style={styles.logo}>
               <Text style={styles.logoText}>PA</Text>
             </View>
-            <Text style={styles.companyName}>PropAI</Text>
+            <Text style={styles.companyName}>PropertyAssistant</Text>
             <Text style={styles.tagline}>"Manage your properties from your pocket"</Text>
             <Text style={styles.subtitle}>Smart Property Management Made Simple</Text>
           </View>
@@ -267,7 +323,7 @@ export default function LoginScreen() {
                 onFocus={() => setFocusedInput('email')}
                 onBlur={() => setFocusedInput(null)}
                 placeholder="Enter your email"
-                placeholderTextColor={colors.grey}
+                placeholderTextColor={colors.textMuted}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -286,7 +342,7 @@ export default function LoginScreen() {
                 onFocus={() => setFocusedInput('password')}
                 onBlur={() => setFocusedInput(null)}
                 placeholder="Enter your password"
-                placeholderTextColor={colors.grey}
+                placeholderTextColor={colors.textMuted}
                 secureTextEntry
                 autoCapitalize="none"
                 autoCorrect={false}
@@ -303,14 +359,14 @@ export default function LoginScreen() {
             {demoAccounts.map((account) => (
               <Pressable
                 key={account.role}
-                style={styles.demoButton}
+                style={[styles.demoButton, getButtonStyle(account.role)]}
                 onPress={() => handleDemoLogin(account.route, account.email)}
               >
                 <View style={styles.demoButtonContent}>
-                  <View style={styles.demoIcon}>
+                  <View style={[styles.demoIcon, getIconStyle(account.role)]}>
                     <IconSymbol 
                       name={account.icon as any} 
-                      size={24} 
+                      size={28} 
                       color="#ffffff" 
                     />
                   </View>
@@ -321,8 +377,8 @@ export default function LoginScreen() {
                 </View>
                 <IconSymbol 
                   name="chevron.right" 
-                  size={18} 
-                  color={colors.grey} 
+                  size={20} 
+                  color={account.color} 
                 />
               </Pressable>
             ))}

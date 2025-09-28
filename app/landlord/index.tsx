@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, SafeAreaView, ScrollView, Pressable, Image } fr
 import { Stack, router } from 'expo-router';
 import { IconSymbol } from '@/components/IconSymbol';
 import BackButton from '@/components/BackButton';
-import { colors, commonStyles } from '@/styles/commonStyles';
+import { colors, commonStyles, gradients } from '@/styles/commonStyles';
 import { mockProperties, mockTickets, mockTenants, mockUsers } from '@/data/mockData';
 
 const styles = StyleSheet.create({
@@ -13,10 +13,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   header: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.landlord,
     paddingTop: 60,
     paddingBottom: 30,
     paddingHorizontal: 20,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
+    boxShadow: '0px 8px 24px rgba(59, 130, 246, 0.3)',
+    elevation: 8,
   },
   headerTop: {
     flexDirection: 'row',
@@ -30,7 +34,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: '800',
+    fontWeight: '900',
     color: '#ffffff',
     marginBottom: 4,
   },
@@ -38,14 +42,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#ffffff',
     opacity: 0.9,
+    fontWeight: '500',
   },
   profileImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     backgroundColor: '#ffffff',
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 3,
+    borderColor: colors.primaryLight,
   },
   content: {
     flex: 1,
@@ -54,13 +61,13 @@ const styles = StyleSheet.create({
   },
   weatherSection: {
     backgroundColor: colors.card,
-    borderRadius: 16,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderRadius: 20,
+    padding: 24,
+    borderWidth: 2,
+    borderColor: colors.info,
     marginBottom: 24,
-    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.08)',
-    elevation: 4,
+    boxShadow: '0px 6px 16px rgba(6, 182, 212, 0.15)',
+    elevation: 6,
   },
   weatherHeader: {
     flexDirection: 'row',
@@ -68,10 +75,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   weatherIcon: {
-    width: 48,
-    height: 48,
-    backgroundColor: colors.primary,
-    borderRadius: 12,
+    width: 56,
+    height: 56,
+    backgroundColor: colors.info,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 16,
@@ -80,124 +87,140 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   weatherTemp: {
-    fontSize: 24,
-    fontWeight: '800',
+    fontSize: 28,
+    fontWeight: '900',
     color: colors.text,
   },
   weatherDesc: {
-    fontSize: 14,
-    color: colors.grey,
+    fontSize: 16,
+    color: colors.textLight,
+    fontWeight: '500',
   },
   weatherDetails: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingTop: 16,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
+    paddingTop: 20,
+    borderTopWidth: 2,
+    borderTopColor: colors.divider,
   },
   weatherDetail: {
     alignItems: 'center',
   },
   weatherDetailLabel: {
     fontSize: 12,
-    color: colors.grey,
-    marginBottom: 4,
+    color: colors.textMuted,
+    marginBottom: 6,
+    fontWeight: '600',
   },
   weatherDetailValue: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: '700',
     color: colors.text,
   },
   newsSection: {
     backgroundColor: colors.card,
-    borderRadius: 16,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderRadius: 20,
+    padding: 24,
+    borderWidth: 2,
+    borderColor: colors.accent,
     marginBottom: 24,
-    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.08)',
-    elevation: 4,
+    boxShadow: '0px 6px 16px rgba(16, 185, 129, 0.15)',
+    elevation: 6,
   },
   newsHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 16,
+    marginBottom: 20,
   },
   newsTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '800',
     color: colors.text,
   },
+  newsIcon: {
+    width: 40,
+    height: 40,
+    backgroundColor: colors.accent,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   newsItem: {
-    paddingVertical: 12,
+    paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.divider,
   },
   lastNewsItem: {
     borderBottomWidth: 0,
   },
   newsItemTitle: {
-    fontSize: 15,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: '700',
     color: colors.text,
-    marginBottom: 4,
+    marginBottom: 6,
+    lineHeight: 22,
   },
   newsItemSource: {
-    fontSize: 12,
-    color: colors.grey,
+    fontSize: 13,
+    color: colors.textLight,
+    fontWeight: '500',
   },
   quickOverview: {
     marginBottom: 30,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: '700',
+    fontSize: 24,
+    fontWeight: '900',
     color: colors.text,
-    marginBottom: 16,
+    marginBottom: 20,
   },
   overviewCard: {
     backgroundColor: colors.card,
-    borderRadius: 16,
-    padding: 20,
+    borderRadius: 20,
+    padding: 24,
     marginBottom: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
-    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
-    elevation: 4,
+    borderWidth: 2,
+    borderColor: colors.secondary,
+    boxShadow: '0px 6px 16px rgba(139, 92, 246, 0.15)',
+    elevation: 6,
   },
   overviewHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 12,
+    marginBottom: 20,
   },
   overviewTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '800',
     color: colors.text,
   },
   viewAllButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: colors.secondary,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 12,
   },
   viewAllText: {
     fontSize: 14,
-    color: colors.primary,
-    fontWeight: '600',
-    marginRight: 4,
+    color: '#ffffff',
+    fontWeight: '700',
+    marginRight: 6,
   },
   propertyItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    borderBottomColor: colors.divider,
   },
   propertyImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 12,
+    width: 72,
+    height: 72,
+    borderRadius: 16,
     marginRight: 16,
     backgroundColor: colors.backgroundAlt,
   },
@@ -205,15 +228,16 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   propertyName: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: '700',
     color: colors.text,
-    marginBottom: 4,
+    marginBottom: 6,
   },
   propertyAddress: {
     fontSize: 14,
-    color: colors.grey,
-    marginBottom: 4,
+    color: colors.textLight,
+    marginBottom: 8,
+    fontWeight: '500',
   },
   vacancyInfo: {
     flexDirection: 'row',
@@ -221,88 +245,122 @@ const styles = StyleSheet.create({
   },
   vacancyText: {
     fontSize: 14,
-    fontWeight: '600',
-    marginLeft: 4,
+    fontWeight: '700',
+    marginLeft: 6,
   },
   statsContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 30,
+    gap: 12,
   },
   statCard: {
     backgroundColor: colors.card,
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: 20,
+    padding: 20,
     flex: 1,
-    marginHorizontal: 4,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderWidth: 2,
     alignItems: 'center',
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.08)',
+    elevation: 4,
+  },
+  propertiesCard: {
+    borderColor: colors.primary,
+  },
+  roomsCard: {
+    borderColor: colors.secondary,
+  },
+  vacantCard: {
+    borderColor: colors.warning,
+  },
+  ticketsCard: {
+    borderColor: colors.error,
   },
   statNumber: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: colors.primary,
-    marginBottom: 4,
+    fontSize: 28,
+    fontWeight: '900',
+    marginBottom: 6,
   },
   statLabel: {
     fontSize: 12,
-    color: colors.grey,
+    color: colors.textMuted,
     textAlign: 'center',
+    fontWeight: '600',
   },
   menuGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     gap: 16,
+    paddingBottom: 40,
   },
   menuItem: {
     backgroundColor: colors.card,
-    borderRadius: 16,
-    padding: 20,
+    borderRadius: 20,
+    padding: 24,
     width: '47%',
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderWidth: 2,
     alignItems: 'center',
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-    elevation: 3,
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.08)',
+    elevation: 4,
+  },
+  propertiesMenu: {
+    borderColor: colors.primary,
+  },
+  ticketsMenu: {
+    borderColor: colors.error,
+  },
+  documentsMenu: {
+    borderColor: colors.accent,
+  },
+  iotMenu: {
+    borderColor: colors.secondary,
+  },
+  messagesMenu: {
+    borderColor: colors.info,
+  },
+  profileMenu: {
+    borderColor: colors.warning,
   },
   menuIcon: {
-    width: 48,
-    height: 48,
-    backgroundColor: colors.primary,
-    borderRadius: 12,
+    width: 56,
+    height: 56,
+    borderRadius: 16,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
+    position: 'relative',
   },
   menuTitle: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     color: colors.text,
     textAlign: 'center',
-    marginBottom: 4,
+    marginBottom: 6,
   },
   menuDescription: {
     fontSize: 12,
-    color: colors.grey,
+    color: colors.textMuted,
     textAlign: 'center',
+    fontWeight: '500',
   },
   badge: {
     position: 'absolute',
-    top: -4,
-    right: -4,
+    top: -6,
+    right: -6,
     backgroundColor: colors.error,
-    borderRadius: 10,
-    minWidth: 20,
-    height: 20,
+    borderRadius: 12,
+    minWidth: 24,
+    height: 24,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#ffffff',
   },
   badgeText: {
     color: '#ffffff',
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '800',
   },
 });
 
@@ -314,6 +372,8 @@ const menuItems = [
     icon: 'house',
     route: '/landlord/properties',
     badge: 0,
+    color: colors.primary,
+    style: 'propertiesMenu',
   },
   {
     id: 'tickets',
@@ -322,6 +382,8 @@ const menuItems = [
     icon: 'exclamationmark.circle',
     route: '/landlord/tickets',
     badge: 0,
+    color: colors.error,
+    style: 'ticketsMenu',
   },
   {
     id: 'documents',
@@ -330,6 +392,8 @@ const menuItems = [
     icon: 'doc.text',
     route: '/landlord/documents',
     badge: 0,
+    color: colors.accent,
+    style: 'documentsMenu',
   },
   {
     id: 'iot',
@@ -338,6 +402,8 @@ const menuItems = [
     icon: 'homekit',
     route: '/landlord/iot',
     badge: 0,
+    color: colors.secondary,
+    style: 'iotMenu',
   },
   {
     id: 'messages',
@@ -346,6 +412,8 @@ const menuItems = [
     icon: 'message',
     route: '/landlord/messages',
     badge: 0,
+    color: colors.info,
+    style: 'messagesMenu',
   },
   {
     id: 'profile',
@@ -354,6 +422,8 @@ const menuItems = [
     icon: 'person.circle',
     route: '/landlord/profile',
     badge: 0,
+    color: colors.warning,
+    style: 'profileMenu',
   },
 ];
 
@@ -422,6 +492,30 @@ export default function LandlordDashboard() {
     return 'exclamationmark.circle.fill';
   };
 
+  const getStatCardStyle = (index: number) => {
+    switch (index) {
+      case 0: return styles.propertiesCard;
+      case 1: return styles.roomsCard;
+      case 2: return styles.vacantCard;
+      case 3: return styles.ticketsCard;
+      default: return {};
+    }
+  };
+
+  const getStatColor = (index: number) => {
+    switch (index) {
+      case 0: return colors.primary;
+      case 1: return colors.secondary;
+      case 2: return colors.warning;
+      case 3: return colors.error;
+      default: return colors.text;
+    }
+  };
+
+  const getMenuItemStyle = (item: any) => {
+    return styles[item.style as keyof typeof styles] || {};
+  };
+
   return (
     <>
       <Stack.Screen
@@ -433,7 +527,7 @@ export default function LandlordDashboard() {
         <View style={styles.container}>
           <View style={styles.header}>
             <View style={styles.headerTop}>
-              <BackButton color="#ffffff" />
+              <BackButton color="#ffffff" variant="primary" />
               <View style={styles.greeting}>
                 <Text style={styles.headerTitle}>
                   Good morning, {landlord?.name.split(' ')[0] || 'Manager'}!
@@ -443,7 +537,7 @@ export default function LandlordDashboard() {
                 </Text>
               </View>
               <View style={styles.profileImage}>
-                <IconSymbol name="person.fill" size={24} color={colors.primary} />
+                <IconSymbol name="person.fill" size={28} color={colors.landlord} />
               </View>
             </View>
           </View>
@@ -453,7 +547,7 @@ export default function LandlordDashboard() {
             <View style={styles.weatherSection}>
               <View style={styles.weatherHeader}>
                 <View style={styles.weatherIcon}>
-                  <IconSymbol name="sun.max.fill" size={24} color="#ffffff" />
+                  <IconSymbol name="sun.max.fill" size={28} color="#ffffff" />
                 </View>
                 <View style={styles.weatherInfo}>
                   <Text style={styles.weatherTemp}>72°F</Text>
@@ -480,7 +574,9 @@ export default function LandlordDashboard() {
             <View style={styles.newsSection}>
               <View style={styles.newsHeader}>
                 <Text style={styles.newsTitle}>Real Estate News</Text>
-                <IconSymbol name="newspaper.fill" size={20} color={colors.primary} />
+                <View style={styles.newsIcon}>
+                  <IconSymbol name="newspaper.fill" size={20} color="#ffffff" />
+                </View>
               </View>
               {realEstateNews.map((news, index) => (
                 <View 
@@ -507,7 +603,7 @@ export default function LandlordDashboard() {
                   </Text>
                   <Pressable style={styles.viewAllButton} onPress={handleViewAllProperties}>
                     <Text style={styles.viewAllText}>View All</Text>
-                    <IconSymbol name="chevron.right" size={14} color={colors.primary} />
+                    <IconSymbol name="chevron.right" size={16} color="#ffffff" />
                   </Pressable>
                 </View>
                 
@@ -526,7 +622,7 @@ export default function LandlordDashboard() {
                       <View style={styles.vacancyInfo}>
                         <IconSymbol
                           name={getVacancyIcon(property.vacantRooms) as any}
-                          size={16}
+                          size={18}
                           color={getVacancyColor(property.vacantRooms)}
                         />
                         <Text style={[
@@ -547,22 +643,19 @@ export default function LandlordDashboard() {
 
             {/* Stats Section */}
             <View style={styles.statsContainer}>
-              <View style={styles.statCard}>
-                <Text style={styles.statNumber}>{totalProperties}</Text>
-                <Text style={styles.statLabel}>Properties</Text>
-              </View>
-              <View style={styles.statCard}>
-                <Text style={styles.statNumber}>{totalRooms}</Text>
-                <Text style={styles.statLabel}>Total Rooms</Text>
-              </View>
-              <View style={styles.statCard}>
-                <Text style={styles.statNumber}>{vacantRooms}</Text>
-                <Text style={styles.statLabel}>Vacant</Text>
-              </View>
-              <View style={styles.statCard}>
-                <Text style={styles.statNumber}>{openTickets}</Text>
-                <Text style={styles.statLabel}>Open Tickets</Text>
-              </View>
+              {[
+                { value: totalProperties, label: 'Properties' },
+                { value: totalRooms, label: 'Total Rooms' },
+                { value: vacantRooms, label: 'Vacant' },
+                { value: openTickets, label: 'Open Tickets' }
+              ].map((stat, index) => (
+                <View key={index} style={[styles.statCard, getStatCardStyle(index)]}>
+                  <Text style={[styles.statNumber, { color: getStatColor(index) }]}>
+                    {stat.value}
+                  </Text>
+                  <Text style={styles.statLabel}>{stat.label}</Text>
+                </View>
+              ))}
             </View>
 
             {/* Menu Grid */}
@@ -570,11 +663,11 @@ export default function LandlordDashboard() {
               {updatedMenuItems.map((item) => (
                 <Pressable
                   key={item.id}
-                  style={styles.menuItem}
+                  style={[styles.menuItem, getMenuItemStyle(item)]}
                   onPress={() => handleMenuPress(item.route)}
                 >
-                  <View style={styles.menuIcon}>
-                    <IconSymbol name={item.icon as any} size={24} color="#ffffff" />
+                  <View style={[styles.menuIcon, { backgroundColor: item.color }]}>
+                    <IconSymbol name={item.icon as any} size={28} color="#ffffff" />
                     {item.badge > 0 && (
                       <View style={styles.badge}>
                         <Text style={styles.badgeText}>{item.badge}</Text>

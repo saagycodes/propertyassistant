@@ -10,30 +10,44 @@ interface BackButtonProps {
   color?: string;
   size?: number;
   style?: any;
+  variant?: 'default' | 'primary' | 'secondary' | 'accent';
 }
 
 const styles = StyleSheet.create({
   backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: colors.card,
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: colors.border,
-    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-    elevation: 3,
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.08)',
+    elevation: 4,
+  },
+  primaryButton: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primaryDark,
+  },
+  secondaryButton: {
+    backgroundColor: colors.secondary,
+    borderColor: colors.secondaryDark,
+  },
+  accentButton: {
+    backgroundColor: colors.accent,
+    borderColor: colors.accentDark,
   },
 });
 
 export default function BackButton({ 
   onPress, 
-  color = colors.text, 
-  size = 20,
-  style 
+  color, 
+  size = 22,
+  style,
+  variant = 'default'
 }: BackButtonProps) {
-  console.log('BackButton rendered');
+  console.log('BackButton rendered with variant:', variant);
 
   const handlePress = () => {
     console.log('Back button pressed');
@@ -44,15 +58,41 @@ export default function BackButton({
     }
   };
 
+  const getButtonStyle = () => {
+    switch (variant) {
+      case 'primary':
+        return styles.primaryButton;
+      case 'secondary':
+        return styles.secondaryButton;
+      case 'accent':
+        return styles.accentButton;
+      default:
+        return {};
+    }
+  };
+
+  const getIconColor = () => {
+    if (color) return color;
+    
+    switch (variant) {
+      case 'primary':
+      case 'secondary':
+      case 'accent':
+        return '#ffffff';
+      default:
+        return colors.text;
+    }
+  };
+
   return (
     <Pressable 
-      style={[styles.backButton, style]} 
+      style={[styles.backButton, getButtonStyle(), style]} 
       onPress={handlePress}
     >
       <IconSymbol 
         name="chevron.left" 
         size={size} 
-        color={color} 
+        color={getIconColor()} 
       />
     </Pressable>
   );
