@@ -5,7 +5,7 @@ import { Stack, router } from 'expo-router';
 import { IconSymbol } from '@/components/IconSymbol';
 import BackButton from '@/components/BackButton';
 import { colors, commonStyles } from '@/styles/commonStyles';
-import { mockUsers, mockProperties, mockTenants } from '@/data/mockData';
+import { mockUsers } from '@/data/mockData';
 
 const styles = StyleSheet.create({
   container: {
@@ -209,86 +209,28 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: colors.text,
   },
-  newsSection: {
-    backgroundColor: colors.card,
-    borderRadius: 16,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginBottom: 12,
-    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.08)',
-    elevation: 4,
-  },
-  newsItem: {
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  lastNewsItem: {
-    borderBottomWidth: 0,
-  },
-  newsTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.text,
-    marginBottom: 4,
-  },
-  newsSource: {
-    fontSize: 12,
-    color: colors.grey,
-    marginBottom: 2,
-  },
-  newsTime: {
-    fontSize: 12,
-    color: colors.grey,
-  },
 });
 
-export default function LandlordProfileScreen() {
-  console.log('LandlordProfileScreen rendered');
+export default function AdminProfileScreen() {
+  console.log('AdminProfileScreen rendered');
 
-  const landlord = mockUsers.find(user => user.role === 'landlord');
-  const totalProperties = mockProperties.length;
-  const totalTenants = mockTenants.length;
+  const admin = mockUsers.find(user => user.role === 'admin');
 
   const profileInfo = [
-    { icon: 'envelope.fill', label: 'Email', value: landlord?.email || 'manager@propai.com' },
-    { icon: 'phone.fill', label: 'Phone', value: landlord?.phone || '+1 (555) 000-0001' },
+    { icon: 'envelope.fill', label: 'Email', value: admin?.email || 'admin@propai.com' },
+    { icon: 'phone.fill', label: 'Phone', value: admin?.phone || '+1 (555) 000-0002' },
     { icon: 'location.fill', label: 'Location', value: 'New York, NY' },
     { icon: 'calendar', label: 'Member Since', value: 'January 2023' },
-    { icon: 'building.2.fill', label: 'Properties Owned', value: `${totalProperties} Properties` },
-    { icon: 'person.2.fill', label: 'Total Tenants', value: `${totalTenants} Tenants` },
+    { icon: 'building.2.fill', label: 'Properties Managed', value: '3 Properties' },
+    { icon: 'person.2.fill', label: 'Total Tenants', value: '58 Tenants' },
   ];
 
   const menuItems = [
     { icon: 'gear', label: 'Account Settings', action: () => console.log('Settings') },
     { icon: 'bell.fill', label: 'Notifications', action: () => console.log('Notifications') },
     { icon: 'shield.fill', label: 'Privacy & Security', action: () => console.log('Privacy') },
-    { icon: 'chart.bar.fill', label: 'Property Analytics', action: () => console.log('Analytics') },
+    { icon: 'chart.bar.fill', label: 'Analytics', action: () => console.log('Analytics') },
     { icon: 'questionmark.circle.fill', label: 'Help & Support', action: () => console.log('Help') },
-  ];
-
-  const realEstateNews = [
-    {
-      title: 'Housing Market Shows Strong Growth in Q1 2024',
-      source: 'Real Estate Weekly',
-      time: '2 hours ago',
-    },
-    {
-      title: 'New Rental Regulations Take Effect Next Month',
-      source: 'Property Management Today',
-      time: '4 hours ago',
-    },
-    {
-      title: 'Smart Home Technology Increases Property Values',
-      source: 'Tech Property News',
-      time: '6 hours ago',
-    },
-    {
-      title: 'Interest Rates Expected to Stabilize This Quarter',
-      source: 'Financial Real Estate',
-      time: '8 hours ago',
-    },
   ];
 
   const handleSignOut = () => {
@@ -304,7 +246,7 @@ export default function LandlordProfileScreen() {
           text: 'Sign Out',
           style: 'destructive',
           onPress: () => {
-            console.log('Landlord signed out');
+            console.log('Admin signed out');
             router.replace('/login');
           },
         },
@@ -316,7 +258,7 @@ export default function LandlordProfileScreen() {
     <>
       <Stack.Screen
         options={{
-          title: 'My Profile',
+          title: 'Admin Profile',
           headerShown: false,
         }}
       />
@@ -329,8 +271,8 @@ export default function LandlordProfileScreen() {
           <View style={styles.profileImage}>
             <IconSymbol name="person.circle.fill" size={80} color={colors.primary} />
           </View>
-          <Text style={styles.profileName}>{landlord?.name || 'Property Manager'}</Text>
-          <Text style={styles.profileRole}>Landlord</Text>
+          <Text style={styles.profileName}>{admin?.name || 'System Admin'}</Text>
+          <Text style={styles.profileRole}>Administrator</Text>
         </View>
 
         <View style={styles.content}>
@@ -361,26 +303,6 @@ export default function LandlordProfileScreen() {
                   <Text style={styles.weatherDetailValue}>6</Text>
                 </View>
               </View>
-            </View>
-          </View>
-
-          {/* Real Estate News Section */}
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Real Estate News</Text>
-            <View style={styles.newsSection}>
-              {realEstateNews.map((news, index) => (
-                <View 
-                  key={index} 
-                  style={[
-                    styles.newsItem,
-                    index === realEstateNews.length - 1 && styles.lastNewsItem
-                  ]}
-                >
-                  <Text style={styles.newsTitle}>{news.title}</Text>
-                  <Text style={styles.newsSource}>{news.source}</Text>
-                  <Text style={styles.newsTime}>{news.time}</Text>
-                </View>
-              ))}
             </View>
           </View>
 

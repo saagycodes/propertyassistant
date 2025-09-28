@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Pressable, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Pressable, TextInput, Alert, Image } from 'react-native';
 import { Stack, router } from 'expo-router';
 import { IconSymbol } from '@/components/IconSymbol';
 import { colors, commonStyles } from '@/styles/commonStyles';
@@ -15,36 +15,46 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 60,
+    marginBottom: 40,
   },
   logo: {
-    width: 120,
-    height: 120,
+    width: 140,
+    height: 140,
     backgroundColor: colors.primary,
-    borderRadius: 30,
+    borderRadius: 35,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
-    boxShadow: '0px 8px 24px rgba(37, 99, 235, 0.3)',
-    elevation: 8,
+    marginBottom: 24,
+    boxShadow: '0px 12px 32px rgba(37, 99, 235, 0.4)',
+    elevation: 12,
   },
   logoText: {
-    fontSize: 32,
-    fontWeight: '800',
+    fontSize: 36,
+    fontWeight: '900',
     color: '#ffffff',
+    letterSpacing: -1,
   },
-  title: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: colors.text,
+  companyName: {
+    fontSize: 36,
+    fontWeight: '900',
+    color: colors.primary,
     textAlign: 'center',
     marginBottom: 8,
+    letterSpacing: -1,
   },
-  subtitle: {
+  tagline: {
     fontSize: 18,
     color: colors.grey,
     textAlign: 'center',
-    marginBottom: 60,
+    marginBottom: 12,
+    fontStyle: 'italic',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: colors.text,
+    textAlign: 'center',
+    marginBottom: 50,
+    fontWeight: '500',
   },
   formContainer: {
     gap: 20,
@@ -61,48 +71,58 @@ const styles = StyleSheet.create({
   },
   input: {
     backgroundColor: colors.card,
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 16,
+    padding: 18,
     fontSize: 16,
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: colors.border,
     color: colors.text,
   },
+  inputFocused: {
+    borderColor: colors.primary,
+    boxShadow: '0px 0px 0px 3px rgba(37, 99, 235, 0.1)',
+  },
   loginButton: {
     backgroundColor: colors.primary,
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 16,
+    padding: 18,
     alignItems: 'center',
     marginBottom: 20,
+    boxShadow: '0px 4px 16px rgba(37, 99, 235, 0.3)',
+    elevation: 6,
   },
   loginButtonText: {
     color: '#ffffff',
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   demoContainer: {
     backgroundColor: colors.backgroundAlt,
-    borderRadius: 16,
-    padding: 20,
+    borderRadius: 20,
+    padding: 24,
     marginTop: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   demoTitle: {
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '700',
     color: colors.text,
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: 20,
   },
   demoButton: {
     backgroundColor: colors.card,
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 16,
+    padding: 18,
     marginBottom: 12,
     borderWidth: 1,
     borderColor: colors.border,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.08)',
+    elevation: 3,
   },
   demoButtonContent: {
     flexDirection: 'row',
@@ -110,21 +130,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   demoIcon: {
-    width: 40,
-    height: 40,
+    width: 48,
+    height: 48,
     backgroundColor: colors.primary,
-    borderRadius: 10,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 12,
+    marginRight: 16,
   },
   demoText: {
     flex: 1,
   },
   demoRole: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '600',
     color: colors.text,
+    marginBottom: 2,
   },
   demoEmail: {
     fontSize: 14,
@@ -137,14 +158,14 @@ const demoAccounts = [
     role: 'landlord',
     name: 'Property Manager',
     email: 'manager@propai.com',
-    icon: 'house',
+    icon: 'house.fill',
     route: '/landlord',
   },
   {
     role: 'tenant',
     name: 'John Smith',
     email: 'john.smith@email.com',
-    icon: 'person',
+    icon: 'person.fill',
     route: '/tenant',
   },
   {
@@ -161,6 +182,7 @@ export default function LoginScreen() {
   
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [focusedInput, setFocusedInput] = useState<string | null>(null);
 
   const handleLogin = () => {
     console.log('Login attempt:', email);
@@ -217,7 +239,7 @@ export default function LoginScreen() {
     <>
       <Stack.Screen
         options={{
-          title: "Login - Prop AI",
+          title: "PropAI - Property Management",
           headerShown: false,
         }}
       />
@@ -227,17 +249,23 @@ export default function LoginScreen() {
             <View style={styles.logo}>
               <Text style={styles.logoText}>PA</Text>
             </View>
-            <Text style={styles.title}>Welcome Back</Text>
-            <Text style={styles.subtitle}>Sign in to your account</Text>
+            <Text style={styles.companyName}>PropAI</Text>
+            <Text style={styles.tagline}>"Manage your properties from your pocket"</Text>
+            <Text style={styles.subtitle}>Smart Property Management Made Simple</Text>
           </View>
 
           <View style={styles.formContainer}>
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Email</Text>
+              <Text style={styles.label}>Email Address</Text>
               <TextInput
-                style={styles.input}
+                style={[
+                  styles.input,
+                  focusedInput === 'email' && styles.inputFocused
+                ]}
                 value={email}
                 onChangeText={setEmail}
+                onFocus={() => setFocusedInput('email')}
+                onBlur={() => setFocusedInput(null)}
                 placeholder="Enter your email"
                 placeholderTextColor={colors.grey}
                 keyboardType="email-address"
@@ -249,9 +277,14 @@ export default function LoginScreen() {
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Password</Text>
               <TextInput
-                style={styles.input}
+                style={[
+                  styles.input,
+                  focusedInput === 'password' && styles.inputFocused
+                ]}
                 value={password}
                 onChangeText={setPassword}
+                onFocus={() => setFocusedInput('password')}
+                onBlur={() => setFocusedInput(null)}
                 placeholder="Enter your password"
                 placeholderTextColor={colors.grey}
                 secureTextEntry
@@ -266,7 +299,7 @@ export default function LoginScreen() {
           </Pressable>
 
           <View style={styles.demoContainer}>
-            <Text style={styles.demoTitle}>Demo Accounts</Text>
+            <Text style={styles.demoTitle}>Try Demo Accounts</Text>
             {demoAccounts.map((account) => (
               <Pressable
                 key={account.role}
@@ -277,7 +310,7 @@ export default function LoginScreen() {
                   <View style={styles.demoIcon}>
                     <IconSymbol 
                       name={account.icon as any} 
-                      size={20} 
+                      size={24} 
                       color="#ffffff" 
                     />
                   </View>
@@ -288,7 +321,7 @@ export default function LoginScreen() {
                 </View>
                 <IconSymbol 
                   name="chevron.right" 
-                  size={16} 
+                  size={18} 
                   color={colors.grey} 
                 />
               </Pressable>

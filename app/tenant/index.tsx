@@ -50,6 +50,62 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 20,
   },
+  weatherSection: {
+    backgroundColor: colors.card,
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginBottom: 24,
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.08)',
+    elevation: 4,
+  },
+  weatherHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  weatherIcon: {
+    width: 48,
+    height: 48,
+    backgroundColor: colors.primary,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
+  },
+  weatherInfo: {
+    flex: 1,
+  },
+  weatherTemp: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: colors.text,
+  },
+  weatherDesc: {
+    fontSize: 14,
+    color: colors.grey,
+  },
+  weatherDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
+  weatherDetail: {
+    alignItems: 'center',
+  },
+  weatherDetailLabel: {
+    fontSize: 12,
+    color: colors.grey,
+    marginBottom: 4,
+  },
+  weatherDetailValue: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.text,
+  },
   quickOverview: {
     marginBottom: 30,
   },
@@ -350,6 +406,33 @@ export default function TenantDashboard() {
           </View>
 
           <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+            {/* Weather Section */}
+            <View style={styles.weatherSection}>
+              <View style={styles.weatherHeader}>
+                <View style={styles.weatherIcon}>
+                  <IconSymbol name="sun.max.fill" size={24} color="#ffffff" />
+                </View>
+                <View style={styles.weatherInfo}>
+                  <Text style={styles.weatherTemp}>72°F</Text>
+                  <Text style={styles.weatherDesc}>Sunny, Clear Sky</Text>
+                </View>
+              </View>
+              <View style={styles.weatherDetails}>
+                <View style={styles.weatherDetail}>
+                  <Text style={styles.weatherDetailLabel}>Humidity</Text>
+                  <Text style={styles.weatherDetailValue}>45%</Text>
+                </View>
+                <View style={styles.weatherDetail}>
+                  <Text style={styles.weatherDetailLabel}>Wind</Text>
+                  <Text style={styles.weatherDetailValue}>8 mph</Text>
+                </View>
+                <View style={styles.weatherDetail}>
+                  <Text style={styles.weatherDetailLabel}>UV Index</Text>
+                  <Text style={styles.weatherDetailValue}>6</Text>
+                </View>
+              </View>
+            </View>
+
             {/* Quick Overview Section */}
             <View style={styles.quickOverview}>
               <Text style={styles.sectionTitle}>Your Residence</Text>

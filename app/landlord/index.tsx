@@ -52,6 +52,101 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 20,
   },
+  weatherSection: {
+    backgroundColor: colors.card,
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginBottom: 24,
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.08)',
+    elevation: 4,
+  },
+  weatherHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  weatherIcon: {
+    width: 48,
+    height: 48,
+    backgroundColor: colors.primary,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
+  },
+  weatherInfo: {
+    flex: 1,
+  },
+  weatherTemp: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: colors.text,
+  },
+  weatherDesc: {
+    fontSize: 14,
+    color: colors.grey,
+  },
+  weatherDetails: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
+  weatherDetail: {
+    alignItems: 'center',
+  },
+  weatherDetailLabel: {
+    fontSize: 12,
+    color: colors.grey,
+    marginBottom: 4,
+  },
+  weatherDetailValue: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.text,
+  },
+  newsSection: {
+    backgroundColor: colors.card,
+    borderRadius: 16,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: colors.border,
+    marginBottom: 24,
+    boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.08)',
+    elevation: 4,
+  },
+  newsHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 16,
+  },
+  newsTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: colors.text,
+  },
+  newsItem: {
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  lastNewsItem: {
+    borderBottomWidth: 0,
+  },
+  newsItemTitle: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: colors.text,
+    marginBottom: 4,
+  },
+  newsItemSource: {
+    fontSize: 12,
+    color: colors.grey,
+  },
   quickOverview: {
     marginBottom: 30,
   },
@@ -262,6 +357,21 @@ const menuItems = [
   },
 ];
 
+const realEstateNews = [
+  {
+    title: 'Housing Market Shows Strong Growth in Q1 2024',
+    source: 'Real Estate Weekly',
+  },
+  {
+    title: 'New Rental Regulations Take Effect Next Month',
+    source: 'Property Management Today',
+  },
+  {
+    title: 'Smart Home Technology Increases Property Values',
+    source: 'Tech Property News',
+  },
+];
+
 export default function LandlordDashboard() {
   console.log('LandlordDashboard rendered');
 
@@ -339,6 +449,53 @@ export default function LandlordDashboard() {
           </View>
 
           <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+            {/* Weather Section */}
+            <View style={styles.weatherSection}>
+              <View style={styles.weatherHeader}>
+                <View style={styles.weatherIcon}>
+                  <IconSymbol name="sun.max.fill" size={24} color="#ffffff" />
+                </View>
+                <View style={styles.weatherInfo}>
+                  <Text style={styles.weatherTemp}>72°F</Text>
+                  <Text style={styles.weatherDesc}>Sunny, Clear Sky</Text>
+                </View>
+              </View>
+              <View style={styles.weatherDetails}>
+                <View style={styles.weatherDetail}>
+                  <Text style={styles.weatherDetailLabel}>Humidity</Text>
+                  <Text style={styles.weatherDetailValue}>45%</Text>
+                </View>
+                <View style={styles.weatherDetail}>
+                  <Text style={styles.weatherDetailLabel}>Wind</Text>
+                  <Text style={styles.weatherDetailValue}>8 mph</Text>
+                </View>
+                <View style={styles.weatherDetail}>
+                  <Text style={styles.weatherDetailLabel}>UV Index</Text>
+                  <Text style={styles.weatherDetailValue}>6</Text>
+                </View>
+              </View>
+            </View>
+
+            {/* Real Estate News Section */}
+            <View style={styles.newsSection}>
+              <View style={styles.newsHeader}>
+                <Text style={styles.newsTitle}>Real Estate News</Text>
+                <IconSymbol name="newspaper.fill" size={20} color={colors.primary} />
+              </View>
+              {realEstateNews.map((news, index) => (
+                <View 
+                  key={index} 
+                  style={[
+                    styles.newsItem,
+                    index === realEstateNews.length - 1 && styles.lastNewsItem
+                  ]}
+                >
+                  <Text style={styles.newsItemTitle}>{news.title}</Text>
+                  <Text style={styles.newsItemSource}>{news.source}</Text>
+                </View>
+              ))}
+            </View>
+
             {/* Quick Overview Section */}
             <View style={styles.quickOverview}>
               <Text style={styles.sectionTitle}>Quick Overview</Text>
